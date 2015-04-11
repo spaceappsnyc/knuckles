@@ -27,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -111,15 +112,22 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="http://www.google.com";
 
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>(){
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("adjustment", delta);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response){
-
-                };
+               Log.d("json", response.toString() );
+            };
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e("json", error.getMessage());
             }
         });
 
