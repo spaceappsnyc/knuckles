@@ -6,15 +6,16 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-var sensors = [
-  new mraa.Aio(0),  new mraa.Aio(1),
-  new mraa.Aio(2),  new mraa.Aio(3)
-];
+var SENSOR_COUNT = 5;
+
+var sensors = [];
+for(var i = 0; i < SENSOR_COUNT; i++){
+	sensors[i] = new mraa.Aio(i);
+}
 
 var readings = [];
-
 setInterval(function(){
-	for(i = 0; i < 4; i++){
+	for(var i = 0; i < SENSOR_COUNT; i++){
 		readings[i] = sensors[i].read();	
 	}
 }, 100);
