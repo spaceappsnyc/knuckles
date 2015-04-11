@@ -108,11 +108,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             Log.d("voice", spokenText);
             frag.setText(spokenText);
             int command = Commander.recognize(spokenText);
-            if(command == Commander.HOTTER) {
-                showAlert("Hotter");
-            } else {
-                showAlert("Colder");
-            }
+
            // requestTemperatureChange(command);
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -128,11 +124,14 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
     }
 
     private void requestTemperatureChange(int delta) {
-        if(delta!=Commander.COLDER && delta!=Commander.HOTTER){
-            return;
+        if(delta != Commander.COLDER && delta != Commander.HOTTER) {
+            showAlert("Unknown command: "+delta);
+           return;
         }
         requestQueue = getRequestQueue();
         String url = boardHost+"/heat";
+
+        Log.d("Request temp change", ""+delta);
 
         JSONObject obj = new JSONObject();
         try {
@@ -146,8 +145,6 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             public void onResponse(JSONObject response) {
                 Log.d("json", response.toString());
             }
-
-            ;
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {

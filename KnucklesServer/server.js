@@ -1,14 +1,29 @@
 var express = require('express');
 var app = express();
+var mraa = require('mraa');
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
+var SENSOR_COUNT = 5;
+
+var sensors = [];
+for(var i = 0; i < SENSOR_COUNT; i++){
+	sensors[i] = new mraa.Aio(i);
+}
+
+var readings = [];
+setInterval(function(){
+	for(var i = 0; i < SENSOR_COUNT; i++){
+		readings[i] = sensors[i].read();	
+	}
+}, 100);
+
 app.get('/heat', function (req, res) {
 
   var data = {
-    "sensors":[1,2,3,4]
+    "sensors":readings
   };
 
   res.send(data);
