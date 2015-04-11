@@ -41,6 +41,9 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
     PlaceholderFragment frag;
     FragmentManager manager;
+    RequestQueue requestQueue;
+
+    public static String boardHost = "http://192.168.0.110:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,17 +113,26 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             } else {
                 showAlert("Colder");
             }
-            requestTemperatureChange(command);
+           // requestTemperatureChange(command);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            // getApplicationContext() is key, it keeps you from leaking the
+            // Activity or BroadcastReceiver if someone passes one in.
+            requestQueue = Volley.newRequestQueue(this);
+        }
+        return requestQueue;
     }
 
     private void requestTemperatureChange(int delta) {
         if(delta!=Commander.COLDER && delta!=Commander.HOTTER){
             return;
         }
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://www.google.com";
+        requestQueue = getRequestQueue();
+        String url = boardHost+"/heat";
 
         JSONObject obj = new JSONObject();
         try {
@@ -143,7 +155,11 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             }
         });
 
-        queue.add(jsonRequest);
+        requestQueue.add(jsonRequest);
+
+    }
+
+    public void readTemperature(){
 
     }
 
