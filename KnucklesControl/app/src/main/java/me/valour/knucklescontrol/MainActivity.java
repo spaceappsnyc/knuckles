@@ -116,6 +116,9 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
     }
 
     private void requestTemperatureChange(int delta) {
+        if(delta!=Commander.COLDER && delta!=Commander.HOTTER){
+            return;
+        }
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://www.google.com";
 
