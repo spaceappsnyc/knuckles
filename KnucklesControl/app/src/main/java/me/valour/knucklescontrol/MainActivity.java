@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -73,6 +75,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showAlert("Settings");
             return true;
         }
 
@@ -102,15 +105,19 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             Log.d("voice", spokenText);
             frag.setText(spokenText);
             int command = Commander.recognize(spokenText);
-
-
+            if(command == Commander.HOTTER) {
+                showAlert("Hotter");
+            } else {
+                showAlert("Colder");
+            }
+            requestTemperatureChange(command);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void requestTemperatureChange(int delta){
+    private void requestTemperatureChange(int delta) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://www.google.com";
+        String url = "http://www.google.com";
 
         JSONObject obj = new JSONObject();
         try {
@@ -119,11 +126,13 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>(){
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject response){
-               Log.d("json", response.toString() );
-            };
+            public void onResponse(JSONObject response) {
+                Log.d("json", response.toString());
+            }
+
+            ;
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -132,6 +141,20 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
         });
 
         queue.add(jsonRequest);
+
+    }
+
+    protected void showAlert(String msg) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Temp Control");
+        alertDialog.setMessage("Message: "+msg);
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // here you can add functions
+            }
+        });
+        alertDialog.setIcon(R.drawable.icon);
+        alertDialog.show();
     }
 
 }
