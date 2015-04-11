@@ -1,5 +1,8 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());
+
 var mraa = require('mraa');
 
 app.get('/', function (req, res) {
@@ -31,8 +34,8 @@ app.get('/heat', function (req, res) {
 });
 
 app.post('/heat', function (req, res) {
-  var resp = {"results":0};
-  console.log(req);
+  var resp = {"results":0, "request": req.body};
+  console.log(resp);
   res.send(resp);
 });
 
