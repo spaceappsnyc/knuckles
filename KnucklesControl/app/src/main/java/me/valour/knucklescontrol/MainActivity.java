@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import java.util.List;
 
@@ -61,6 +63,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showAlert("Settings");
             return true;
         }
 
@@ -89,9 +92,26 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             String spokenText = results.get(0);
             Log.d("voice", spokenText);
             frag.setText(spokenText);
-            Commander.recognize(spokenText);
+            if(Commander.recognize(spokenText) == Commander.HOTTER) {
+                showAlert("Hotter");
+            } else {
+                showAlert("Colder");
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    protected void showAlert(String msg) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Temp Control");
+        alertDialog.setMessage("Message: "+msg);
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // here you can add functions
+            }
+        });
+        alertDialog.setIcon(R.drawable.icon);
+        alertDialog.show();
     }
 
 }
