@@ -18,6 +18,17 @@ import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 import me.valour.knucklescontrol.helpers.Commander;
@@ -89,9 +100,30 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             String spokenText = results.get(0);
             Log.d("voice", spokenText);
             frag.setText(spokenText);
-            Commander.recognize(spokenText);
+            int command = Commander.recognize(spokenText);
+
+
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void requestTemperatureChange(int delta){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://www.google.com";
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response){
+
+                };
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        queue.add(jsonRequest);
     }
 
 }
