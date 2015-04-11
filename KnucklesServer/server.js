@@ -23,10 +23,17 @@ setInterval(function(){
 app.get('/heat', function (req, res) {
 
   var data = {
-    "sensors":readings
+    "sensors":readings,
+    "temps":[]
   };
 
   res.send(data);
+});
+
+app.post('/heat', function (req, res) {
+  var resp = {"results":0};
+  console.log(req);
+  res.send(resp);
 });
 
 var server = app.listen(8080, function () {

@@ -41,6 +41,9 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
     PlaceholderFragment frag;
     FragmentManager manager;
+    RequestQueue requestQueue;
+
+    public static String boardHost = "http://192.168.0.110:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,16 +108,19 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             Log.d("voice", spokenText);
             frag.setText(spokenText);
             int command = Commander.recognize(spokenText);
-            /*
-            if(command == Commander.HOTTER) {
-                showAlert("Hotter");
-            } else {
-                showAlert("Colder");
-            }
-            */
-            requestTemperatureChange(command);
+
+           // requestTemperatureChange(command);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            // getApplicationContext() is key, it keeps you from leaking the
+            // Activity or BroadcastReceiver if someone passes one in.
+            requestQueue = Volley.newRequestQueue(this);
+        }
+        return requestQueue;
     }
 
     private void requestTemperatureChange(int delta) {
@@ -122,8 +128,8 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             showAlert("Unknown command: "+delta);
            return;
         }
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.1.10:8080/heat";
+        requestQueue = getRequestQueue();
+        String url = boardHost+"/heat";
 
         Log.d("Request temp change", ""+delta);
 
@@ -146,7 +152,11 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             }
         });
 
-        queue.add(jsonRequest);
+        requestQueue.add(jsonRequest);
+
+    }
+
+    public void readTemperature(){
 
     }
 
