@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import me.valour.knucklescontrol.helpers.Commander;
+
 
 public class MainActivity extends ActionBarActivity implements PlaceholderFragment.PlaceholderFragmentListener {
 
@@ -87,6 +89,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             String spokenText = results.get(0);
             Log.d("voice", spokenText);
             frag.setText(spokenText);
+            Commander.recognize(spokenText);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
