@@ -1,4 +1,4 @@
-package me.valour.knucklescontroller;
+package me.valour.knucklescontrol;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;

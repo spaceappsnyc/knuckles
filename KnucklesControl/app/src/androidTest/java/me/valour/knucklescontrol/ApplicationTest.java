@@ -1,4 +1,4 @@
-package me.valour.knucklescontroller;
+package me.valour.knucklescontrol;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
