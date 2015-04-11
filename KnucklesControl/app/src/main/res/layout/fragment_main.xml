@@ -7,6 +7,16 @@
     tools:context=".MainActivity$PlaceholderFragment">
 
     <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/startlabel" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Listen"
+        android:id="@+id/listen_button"
+        android:layout_below="@+id/startlabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp" />
 
 </RelativeLayout>
