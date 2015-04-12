@@ -16,26 +16,38 @@ import android.widget.TextView;
 public class PlaceholderFragment extends Fragment{
 
 
-    TextView startLabel;
-    Button listenButton;
+    TextView mStartLabel;
+    Button mListenButton;
+    Button mLightsButton;
     PlaceholderFragmentListener listener;
 
-    public PlaceholderFragment() {
-    }
+    public PlaceholderFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        startLabel = (TextView)rootView.findViewById(R.id.startlabel);
-        listenButton = (Button)rootView.findViewById(R.id.listen_button);
+        mStartLabel   = (TextView)rootView.findViewById(R.id.startlabel);
+        mListenButton = (Button)rootView.findViewById(R.id.listen_button);
+        mLightsButton = (Button)rootView.findViewById(R.id.lights_button);
 
-        listenButton.setOnClickListener(new View.OnClickListener() {
+        mListenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("voice", "listening for command");
                 listener.displaySpeechRecognizer();
+            }
+        });
+
+        mLightsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // if(MainActivity.light_on) {
+                // MainActivity.showLight();
+                // } else {
+                // MainActivity.hideLight();
+                // }
             }
         });
         return rootView;
@@ -57,14 +69,12 @@ public class PlaceholderFragment extends Fragment{
         listener = null;
     }
 
-    public void setText(String msg){
-        startLabel.setText(msg);
+    public void setText(String msg) {
+        mStartLabel.setText(msg);
     }
 
-    public interface PlaceholderFragmentListener{
-
+    public interface PlaceholderFragmentListener {
         public void displaySpeechRecognizer();
     }
-
 
 }

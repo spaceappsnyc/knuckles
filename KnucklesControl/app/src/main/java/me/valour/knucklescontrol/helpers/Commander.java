@@ -9,8 +9,9 @@ import org.apache.commons.codec.language.Soundex;
 
 public class Commander {
 
-    public static int HOTTER = 1;
-    public static int COLDER = -1;
+    public static final int HOTTER = 1;
+    public static final int COLDER = -1;
+    public static final int LIGHTS = 2;
 
     public static int recognize(String command){
         Soundex soundex = new Soundex();
@@ -21,9 +22,11 @@ public class Commander {
         if(command.contains("hot") || command.contains("warm")){
             return HOTTER;
         }
-
-        else if(command.contains("cold")){
+        else if(command.contains("cold")) {
             return COLDER;
+        }
+        else if(command.contains("light") || command.contains("ite")) {
+            return LIGHTS;
         }
 
         else {

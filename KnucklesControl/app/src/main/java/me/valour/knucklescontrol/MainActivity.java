@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -42,23 +43,41 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
     PlaceholderFragment frag;
     FragmentManager manager;
     RequestQueue requestQueue;
+    TextView mStatusView;
 
-    public static String boardHost = "http://192.168.0.110:8080";
+    public static String boardHost = "http://192.168.43.199:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Startup","Initiating startup sequence.");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         frag = new PlaceholderFragment();
         manager = getFragmentManager();
+        mStatusView = (TextView) findViewById(R.id.status);
 
         if (savedInstanceState == null) {
-            manager.beginTransaction().add(R.id.container, frag).commit();
+            manager.beginTransaction().add(R.id.body, frag).commit();
             /*
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, frag)
                     .commit(); */
         }
+        final Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            private long time = 0;
+
+            @Override
+            public void run()
+            {
+                // do stuff then
+                // can call h again after work!
+                time += 2000;
+                Log.d("TimerExample", "Going for... " + time);
+                updateStatus();
+                h.postDelayed(this, 2000);
+            }
+        }, 1000); // 1 second delay (takes millis)
     }
 
 
@@ -97,7 +116,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
     }
 
     // This callback is invoked when the Speech Recognizer returns.
-// This is where you process the intent and extract the speech text from the intent.
+    // This is where you process the intent and extract the speech text from the intent.
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
@@ -108,8 +127,12 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             Log.d("voice", spokenText);
             frag.setText(spokenText);
             int command = Commander.recognize(spokenText);
-
-           // requestTemperatureChange(command);
+            switch(command) {
+                case Commander.LIGHTS:
+                    toggleLights();
+                    break;
+            }
+            // requestTemperatureChange(command);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -121,6 +144,75 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             requestQueue = Volley.newRequestQueue(this);
         }
         return requestQueue;
+    }
+
+    private void updateStatus() {
+        requestQueue = getRequestQueue();
+        String url = boardHost+"/status";
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("json", response.toString());
+                try {
+                    boolean isHeating = response.getBoolean("is_heating");
+                    if(isHeating) {
+                        mStatusView.setBackgroundColor(getResources().getColor(R.color.red));
+                        mStatusView.setText("HEATING");
+                        Log.d("Heat","Heating");
+                    } else {
+                        mStatusView.setBackgroundColor(getResources().getColor(R.color.blue));
+                        mStatusView.setText("COOLING");
+                        Log.d("Cool","Cooling");
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Log.e("json", error.getMessage());
+                Log.e("json", "Error reaching server");
+            }
+        });
+
+        requestQueue.add(jsonRequest);
+    }
+
+    private void toggleLights() {
+        Log.d("LIGHTS","LIGHTS");
+        /*
+        requestQueue = getRequestQueue();
+        String url = boardHost+"/light";
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("on", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("json", response.toString());
+                try {
+                    boolean success = response.getBoolean("on");
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String msg = (error == null) ? "Error reaching server" : error.getMessage();
+                Log.e("json", msg);
+            }
+        });
+
+        requestQueue.add(jsonRequest);
+        */
     }
 
     private void requestTemperatureChange(int delta) {
@@ -153,14 +245,9 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
         });
 
         requestQueue.add(jsonRequest);
-
     }
 
-    public void readTemperature(){
-
-    }
-
-    protected void showAlert(String msg) {
+    public void showAlert(String msg) {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Temp Control");
         alertDialog.setMessage("Message: "+msg);
@@ -169,7 +256,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                 // here you can add functions
             }
         });
-        alertDialog.setIcon(R.drawable.icon);
+        alertDialog.setIcon(R.drawable.warning);
         alertDialog.show();
     }
 
