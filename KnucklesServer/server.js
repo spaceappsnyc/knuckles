@@ -79,7 +79,7 @@ app.post('/settings', function (req, res) {
       settings.manual = body.manual;
     }
 
-  console.log(resp);
+  console.log(res);
   res.send(settings);
 });
 
