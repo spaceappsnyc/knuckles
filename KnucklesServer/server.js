@@ -40,7 +40,7 @@ function manageTemp(t) {
 			is_on = true;
 			out.write(1);
 			console.log("(auto) turned on");
-		} else if(t => settings.min_temp && is_on){
+		} else if(t >= settings.min_temp && is_on){
 			is_on = false;
 			out.write(0);
 			console.log("(auto) turned off");	
