@@ -49,37 +49,38 @@ function manageTemp(t) {
 }
 
 app.get('/heat', function (req, res) {
-  var data = getState();
-  res.send(data);
+  res.send(getState());
 });
 
-app.post('/heat', function (req, res) {
+app.post('/heat', function(req, res){
+	if(settings.manual){
+		var on = 0;
+		is_on = false;
+		if(req.body.on){
+			on = 1;
+			is_on = true;
+		}	
+		out.write(on);
+	}
+	res.send(getState());
+});
+
+app.get('/settings', function(req, res) {
+	res.send(settings);
+});
+
+app.post('/settings', function (req, res) {
   var body = req.body;
-  var on = 0;
 
-  if('settings' in body){
-    if('min_temp' in body.settings){
-      settings.min_temp = body.settings.min_temp;
+    if('min_temp' in body){
+      settings.min_temp = body.min_temp;
     }
-    if('manual' in body.settings){
-      settings.manual = body.settings.manual;
+    if('manual' in body){
+      settings.manual = body.manual;
     }
-  }
 
-  if(settings.manual){
-    if(body.on){
-      is_on = true;
-      on = 1;
-    } else {
-      is_on = false;
-      on = 0;
-    }
-  }
-
-  out.write(on);
-  var resp = {"request": body, "state": getState(), "settings": settings};
   console.log(resp);
-  res.send(resp);
+  res.send(settings);
 });
 
 var readings = [];
