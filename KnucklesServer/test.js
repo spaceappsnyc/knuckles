@@ -6,9 +6,9 @@ var analogPin = 0;
 //var digitalPin = new mraa.Gpio(pinNumber);
 //var analogPin = new mraa.Aio(analogPin);
 
-var x = mraa.Pwm(pinNumber);
-x.period_us(700);
-x.enable(True);
+var x = new mraa.Pwm(pinNumber);
+x.period_us(500);
+x.enable(true);
 var value = 0.0;
 //digitalPin.dir(mraa.DIR_OUT); // vs DIR_IN
 
