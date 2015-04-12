@@ -89,6 +89,7 @@ setInterval(function(){
 		readings[i] = sensors[i].read();
 		temps[i] = f.btot(readings[i]).t_c;
 	}
+        manageTemp(temps[0]);
 }, 100);
 
 var server = app.listen(8080, function () {
