@@ -19,4 +19,50 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="96dp" />
 
+    <RelativeLayout
+        android:id="@+id/hand_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listen_button">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <Button
+                android:text="0"
+                android:id="@+id/finger_thumb"
+                android:layout_width="@dimen/finger_button_size"
+                android:layout_height="@dimen/finger_button_size" />
+            <Button
+                android:text="0"
+                android:id="@+id/finger_first"
+                android:layout_width="@dimen/finger_button_size"
+                android:layout_height="@dimen/finger_button_size" />
+            <Button
+                android:text="0"
+                android:id="@+id/finger_middle"
+                android:layout_width="@dimen/finger_button_size"
+                android:layout_height="@dimen/finger_button_size" />
+            <Button
+                android:text="0"
+                android:id="@+id/finger_ring"
+                android:layout_width="@dimen/finger_button_size"
+                android:layout_height="@dimen/finger_button_size" />
+            <Button
+                android:text="0"
+                android:id="@+id/finger_pinky"
+                android:layout_width="@dimen/finger_button_size"
+                android:layout_height="@dimen/finger_button_size" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/hand_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/hand" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

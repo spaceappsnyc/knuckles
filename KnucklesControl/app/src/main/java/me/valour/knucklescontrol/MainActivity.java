@@ -17,6 +17,20 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -27,6 +41,9 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
     PlaceholderFragment frag;
     FragmentManager manager;
+    RequestQueue requestQueue;
+
+    public static String boardHost = "http://192.168.0.110:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +78,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showAlert("Settings");
             return true;
         }
 
@@ -89,9 +107,70 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             String spokenText = results.get(0);
             Log.d("voice", spokenText);
             frag.setText(spokenText);
-            Commander.recognize(spokenText);
+            int command = Commander.recognize(spokenText);
+
+           // requestTemperatureChange(command);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            // getApplicationContext() is key, it keeps you from leaking the
+            // Activity or BroadcastReceiver if someone passes one in.
+            requestQueue = Volley.newRequestQueue(this);
+        }
+        return requestQueue;
+    }
+
+    private void requestTemperatureChange(int delta) {
+        if(delta != Commander.COLDER && delta != Commander.HOTTER) {
+            showAlert("Unknown command: "+delta);
+           return;
+        }
+        requestQueue = getRequestQueue();
+        String url = boardHost+"/heat";
+
+        Log.d("Request temp change", ""+delta);
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("adjustment", delta);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("json", response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("json", error.getMessage());
+            }
+        });
+
+        requestQueue.add(jsonRequest);
+
+    }
+
+    public void readTemperature(){
+
+    }
+
+    protected void showAlert(String msg) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Temp Control");
+        alertDialog.setMessage("Message: "+msg);
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // here you can add functions
+            }
+        });
+        alertDialog.setIcon(R.drawable.icon);
+        alertDialog.show();
     }
 
 }
