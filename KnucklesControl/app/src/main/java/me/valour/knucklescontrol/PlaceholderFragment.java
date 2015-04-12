@@ -23,6 +23,7 @@ public class PlaceholderFragment extends Fragment{
     Button mLightsButton;
     HandView hand;
     PlaceholderFragmentListener listener;
+    TextView mStatusView;
 
     public PlaceholderFragment() {}
 
@@ -31,9 +32,9 @@ public class PlaceholderFragment extends Fragment{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mStartLabel   = (TextView)rootView.findViewById(R.id.startlabel);
         mListenButton = (Button)rootView.findViewById(R.id.listen_button);
         mLightsButton = (Button)rootView.findViewById(R.id.lights_button);
+        mStatusView = (TextView) rootView.findViewById(R.id.status);
 
         hand = (HandView)rootView.findViewById(R.id.handview);
 
@@ -85,6 +86,14 @@ public class PlaceholderFragment extends Fragment{
     public void registerTempChange(int delta){
         hand.tempChange = delta;
         hand.invalidate();
+
+        if(delta==1){
+            mStatusView.setBackgroundColor(getResources().getColor(R.color.red));
+            mStatusView.setText("HEATING");
+        } else if(delta==-1){
+            mStatusView.setBackgroundColor(getResources().getColor(R.color.blue));
+            mStatusView.setText("COOLING");
+        }
     }
 
     public void registerFingerTemperatures(int index, float temp){

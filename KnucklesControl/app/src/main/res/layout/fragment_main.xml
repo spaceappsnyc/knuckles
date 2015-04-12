@@ -9,82 +9,51 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity$PlaceholderFragment">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/startlabel" />
-
-    <LinearLayout
-        android:id="@+id/buttons"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/startlabel">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Listen"
-            android:id="@+id/listen_button"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="96dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lights"
-            android:id="@+id/lights_button"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="96dp" />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/hand_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttons">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <Button
-                android:text="0"
-                android:id="@+id/finger_thumb"
-                android:layout_width="@dimen/finger_button_size"
-                android:layout_height="@dimen/finger_button_size" />
-            <Button
-                android:text="0"
-                android:id="@+id/finger_first"
-                android:layout_width="@dimen/finger_button_size"
-                android:layout_height="@dimen/finger_button_size" />
-            <Button
-                android:text="0"
-                android:id="@+id/finger_middle"
-                android:layout_width="@dimen/finger_button_size"
-                android:layout_height="@dimen/finger_button_size" />
-            <Button
-                android:text="0"
-                android:id="@+id/finger_ring"
-                android:layout_width="@dimen/finger_button_size"
-                android:layout_height="@dimen/finger_button_size" />
-            <Button
-                android:text="0"
-                android:id="@+id/finger_pinky"
-                android:layout_width="@dimen/finger_button_size"
-                android:layout_height="@dimen/finger_button_size" />
-
-        </LinearLayout>
-
-        <me.valour.knucklescontrol.views.HandView
+    <me.valour.knucklescontrol.views.HandView
             android:id="@+id/handview"
-            custom:tempChange="cooler"
+            custom:tempChange="same"
             custom:temp0="0"
             custom:temp1="0"
             custom:temp2="0"
             custom:temp3="0"
             custom:temp4="0"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"
+        android:layout_below="@+id/buttons"
+        android:layout_alignParentStart="true" />
 
-    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Listen"
+            android:id="@+id/listen_button"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lights"
+            android:id="@+id/lights_button"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/status"
+        android:text="NOTHING"
+        android:textSize="50dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@color/todo"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/handview"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

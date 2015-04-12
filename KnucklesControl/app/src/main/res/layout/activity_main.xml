@@ -3,13 +3,9 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" tools:ignore="MergeRootFrame">
+    tools:context=".MainActivity" tools:ignore="MergeRootFrame"
+    android:background="@drawable/background01">
 
-    <ImageView
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/background01" />
 
     <LinearLayout
        android:id="@+id/main"
@@ -17,21 +13,10 @@
        android:layout_width="fill_parent"
        android:layout_height="fill_parent">
 
-       <TextView
-           android:id="@+id/status"
-           android:text="NOTHING"
-           android:textSize="50dp"
-           android:gravity="center"
-           android:textColor="@color/white"
-           android:background="@color/todo"
-           android:layout_width="fill_parent"
-           android:layout_height="200dp" />
-
        <RelativeLayout
            android:id="@+id/body"
            android:layout_width="fill_parent"
            android:layout_height="fill_parent"></RelativeLayout>
-
    </LinearLayout>
 
 </FrameLayout>

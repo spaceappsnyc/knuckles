@@ -30,6 +30,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,9 +44,8 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
     PlaceholderFragment frag;
     FragmentManager manager;
     RequestQueue requestQueue;
-    TextView mStatusView;
 
-    public static String boardHost = "http://192.168.43.199:8080";
+    public static String boardHost = "http://192.168.0.111:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,6 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
         setContentView(R.layout.activity_main);
         frag = new PlaceholderFragment();
         manager = getFragmentManager();
-        mStatusView = (TextView) findViewById(R.id.status);
 
         if (savedInstanceState == null) {
             manager.beginTransaction().add(R.id.body, frag).commit();
@@ -157,17 +156,19 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                 try {
                     boolean isHeating = response.getBoolean("is_heating");
                     if(isHeating) {
-                        mStatusView.setBackgroundColor(getResources().getColor(R.color.red));
-                        mStatusView.setText("HEATING");
+
                         frag.registerTempChange(1);
                         Log.d("Heat","Heating");
                     } else {
-                        mStatusView.setBackgroundColor(getResources().getColor(R.color.blue));
-                        mStatusView.setText("COOLING");
+
                         frag.registerTempChange(-1);
                         Log.d("Cool","Cooling");
                     }
-                    response.getJSONArray("temperatures");
+                    JSONArray temps = response.getJSONArray("temps");
+                    int len = temps.length();
+                    for(int i=0; i<len; i++){
+                        frag.registerFingerTemperatures(i, (float)temps.getDouble(i) );
+                    }
                 } catch(JSONException e) {
                     e.printStackTrace();
                 }

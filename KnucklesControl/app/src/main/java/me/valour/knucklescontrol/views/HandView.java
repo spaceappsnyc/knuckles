@@ -85,17 +85,18 @@ public class HandView extends View {
     private Paint getHandPaint(){
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
+        paint.setAlpha(150);
         switch (tempChange){
             case -1:
-                Shader shader = new LinearGradient(0, 0, 0, getPix(100.0), Color.CYAN, Color.WHITE, Shader.TileMode.CLAMP);
+                Shader shader = new LinearGradient(0, 0, 0, getPix(100.0), Color.DKGRAY, Color.BLUE, Shader.TileMode.CLAMP);
                 paint.setShader(shader);
                 break;
             case 1:
-                Shader shader2 = new LinearGradient(0, 0, 0, getPix(100.0), Color.RED, Color.WHITE, Shader.TileMode.CLAMP);
+                Shader shader2 = new LinearGradient(0, 0, 0, getPix(100.0), Color.DKGRAY, Color.RED, Shader.TileMode.CLAMP);
                 paint.setShader(shader2);
                 break;
             default:
-                paint.setColor(Color.LTGRAY);
+                paint.setColor(Color.DKGRAY);
                 break;
         }
 
@@ -192,7 +193,7 @@ public class HandView extends View {
 
         Paint textPaint = new Paint();
         textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        textPaint.setColor(Color.BLACK);
+        textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(25);
 
         for(int i=0; i<5; i++){
