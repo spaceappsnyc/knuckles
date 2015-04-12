@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HandView">
+        <attr name="temp0" format="float" />
+        <attr name="temp1" format="float" />
+        <attr name="temp2" format="float" />
+        <attr name="temp3" format="float" />
+        <attr name="temp4" format="float" />
+        <attr name="tempChange" format="enum">
+            <enum name="cooler" value="-1"/>
+            <enum name="same" value="0" />
+            <enum name="warmer" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
