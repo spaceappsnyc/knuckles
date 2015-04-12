@@ -1,5 +1,8 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());
+
 var mraa = require('mraa');
 
 app.get('/', function (req, res) {
@@ -23,10 +26,17 @@ setInterval(function(){
 app.get('/heat', function (req, res) {
 
   var data = {
-    "sensors":readings
+    "sensors":readings,
+    "temps":[]
   };
 
   res.send(data);
+});
+
+app.post('/heat', function (req, res) {
+  var resp = {"results":0, "request": req.body};
+  console.log(resp);
+  res.send(resp);
 });
 
 var server = app.listen(8080, function () {

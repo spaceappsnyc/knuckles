@@ -1,0 +1,8 @@
+{
+  "name": "FirstHand-Server",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "4.2.x",
+    "body-parser": "1.12.x"
+  }
+}
