@@ -48,7 +48,7 @@ function manageTemp(t) {
 	}
 }
 
-app.get('/heat', function (req, res) {
+app.get('/status', function (req, res) {
   res.send(getState());
 });
 
