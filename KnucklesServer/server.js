@@ -12,8 +12,9 @@ var out = new mraa.Gpio(OUT_PIN);
 out.dir(mraa.DIR_OUT);
 var is_on = false;
 out.write(0);
+var mode = "off";
 
-var settings = {"min_temp":23.0 ,"manual":true}
+var settings = {"min_temp":23.0}
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
@@ -30,20 +31,22 @@ function getState() {
   return {
     "sensors":readings,
     "temps":temps,
-    "is_heating": is_on
+    "mode":mode,
+    "is_heating": is_on,
+    "settings": settings
   };
 }
 
 function manageTemp(t) {
-	if(!settings.manual){
+	if(mode == "auto"){
 		if(t <= settings.min_temp && !is_on){
 			is_on = true;
 			out.write(1);
-			console.log("(auto) turned on");
+			console.log("(auto) turned on | "+t);
 		} else if(t >= settings.min_temp && is_on){
 			is_on = false;
 			out.write(0);
-			console.log("(auto) turned off");	
+			console.log("(auto) turned off | "+t);	
 		}
 	}
 }
@@ -53,14 +56,19 @@ app.get('/status', function (req, res) {
 });
 
 app.post('/heat', function(req, res){
-	if(settings.manual){
-		var on = 0;
+	var body = req.body;
+	if(body.mode == "on"){
+		mode = body.mode;
+		is_on = true;
+		out.write(1);	
+	} else if(body.mode == "off"){
+		mode = body.mode;
 		is_on = false;
-		if(req.body.on){
-			on = 1;
-			is_on = true;
-		}	
-		out.write(on);
+		out.write(0);	
+	} else if(body.mode == "auto"){
+		mode = body.mode;
+		is_on = false;
+		out.write(0);
 	}
 	res.send(getState());
 });
@@ -74,9 +82,6 @@ app.post('/settings', function (req, res) {
 
     if('min_temp' in body){
       settings.min_temp = body.min_temp;
-    }
-    if('manual' in body){
-      settings.manual = body.manual;
     }
 
   console.log(settings);
