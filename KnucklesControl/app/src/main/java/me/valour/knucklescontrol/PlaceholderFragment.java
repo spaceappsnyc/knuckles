@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import me.valour.knucklescontrol.views.HandView;
+
 /**
  * Created by alice on 4/11/15.
  */
@@ -19,6 +21,7 @@ public class PlaceholderFragment extends Fragment{
     TextView mStartLabel;
     Button mListenButton;
     Button mLightsButton;
+    HandView hand;
     PlaceholderFragmentListener listener;
 
     public PlaceholderFragment() {}
@@ -31,6 +34,8 @@ public class PlaceholderFragment extends Fragment{
         mStartLabel   = (TextView)rootView.findViewById(R.id.startlabel);
         mListenButton = (Button)rootView.findViewById(R.id.listen_button);
         mLightsButton = (Button)rootView.findViewById(R.id.lights_button);
+
+        hand = (HandView)rootView.findViewById(R.id.handview);
 
         mListenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +80,16 @@ public class PlaceholderFragment extends Fragment{
 
     public interface PlaceholderFragmentListener {
         public void displaySpeechRecognizer();
+    }
+
+    public void registerTempChange(int delta){
+        hand.tempChange = delta;
+        hand.invalidate();
+    }
+
+    public void registerFingerTemperatures(int index, float temp){
+        hand.fingersTemp[index] = temp;
+        hand.invalidate();
     }
 
 }

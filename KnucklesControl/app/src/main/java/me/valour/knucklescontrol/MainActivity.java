@@ -159,12 +159,15 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                     if(isHeating) {
                         mStatusView.setBackgroundColor(getResources().getColor(R.color.red));
                         mStatusView.setText("HEATING");
+                        frag.registerTempChange(1);
                         Log.d("Heat","Heating");
                     } else {
                         mStatusView.setBackgroundColor(getResources().getColor(R.color.blue));
                         mStatusView.setText("COOLING");
+                        frag.registerTempChange(-1);
                         Log.d("Cool","Cooling");
                     }
+                    response.getJSONArray("temperatures");
                 } catch(JSONException e) {
                     e.printStackTrace();
                 }

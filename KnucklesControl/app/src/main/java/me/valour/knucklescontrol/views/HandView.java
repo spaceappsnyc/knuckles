@@ -46,11 +46,11 @@ public class HandView extends View {
         }
 
         fingersPosition = new Position[5];
-        fingersPosition[0] = new Position(80,30);
+        fingersPosition[0] = new Position(80,35);
         fingersPosition[1] = new Position(45,5);
         fingersPosition[2] = new Position(30, 5);
         fingersPosition[3] = new Position(20, 15);
-        fingersPosition[4] = new Position(12, 18);
+        fingersPosition[4] = new Position(12, 28);
 
     }
 
@@ -89,11 +89,14 @@ public class HandView extends View {
             case -1:
                 Shader shader = new LinearGradient(0, 0, 0, getPix(100.0), Color.CYAN, Color.WHITE, Shader.TileMode.CLAMP);
                 paint.setShader(shader);
+                break;
             case 1:
                 Shader shader2 = new LinearGradient(0, 0, 0, getPix(100.0), Color.RED, Color.WHITE, Shader.TileMode.CLAMP);
                 paint.setShader(shader2);
+                break;
             default:
                 paint.setColor(Color.LTGRAY);
+                break;
         }
 
         return paint;
@@ -188,11 +191,12 @@ public class HandView extends View {
         canvas.drawPath(p, paint);
 
         Paint textPaint = new Paint();
-        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(25);
 
         for(int i=0; i<5; i++){
-            canvas.drawText(String.format("%f C", fingersTemp[i]), getPix(fingersPosition[i].x), getPix(fingersPosition[i].y), textPaint);
+            canvas.drawText(String.format("%.1f C", fingersTemp[i]), getPix(fingersPosition[i].x), getPix(fingersPosition[i].y), textPaint);
         }
     }
 
