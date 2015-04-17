@@ -2,19 +2,50 @@ var self = {
 	LOOP_SPEED: 100,
 	SENSOR_COUNT: 5,
 	OUT_COUNT: 5,
+	LIGHT_COUNT: 5,
 	interval: null,
+	SENSOR_PINS: [0,1,2,3,4],
+	HEAT_PINS: [],
+	LIGHT_PINS: [],
+	
 	readings: [],
 	temps: [],
 	peltier_on: [],
 	light_on: [],
-	start: function(){
+
+	sensors: [],
+	heaters: [],
+	lights: [],
+	start: function(callback){
+		for(var i = 0; i < self.SENSOR_COUNT; i++){
+		
+		
+		}
 		self.interval = setInterval(function(){
 			for(var i = 0; i < self.SENSOR_COUNT; i++){
-				console.log('s');
+				self.temps[i] = 128;
 			}
+			callback(self.temps);
 		}, self.LOOP_SPEED);
 	},
 	
+	turnAllOff: function(){
+		
+	},
+	stop: function(){
+		self.turnAllOff();
+		clearInterval(self.interval);
+		
+	},
+	setHeat: function(sensor, on){
+	
+		
+	},
+	
+	setLight: function(sensor, on){
+	
+		
+	},
 	
 	btot: function (b) {
 
