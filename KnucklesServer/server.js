@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var f = require('./f');
+var io = require('./io');
 
 app.use(bodyParser.json());
 
