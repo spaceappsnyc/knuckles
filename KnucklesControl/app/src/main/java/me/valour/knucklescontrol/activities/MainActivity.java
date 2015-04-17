@@ -1,33 +1,24 @@
-package me.valour.knucklescontrol;
+package me.valour.knucklescontrol.activities;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.Button;
-import android.widget.TextView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -36,6 +27,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import me.valour.knucklescontrol.fragments.PlaceholderFragment;
+import me.valour.knucklescontrol.R;
+import me.valour.knucklescontrol.fragments.PrefsFragment;
 import me.valour.knucklescontrol.helpers.Commander;
 
 
@@ -45,7 +39,9 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
     FragmentManager manager;
     RequestQueue requestQueue;
 
-    public static String boardHost = "http://192.168.0.111:8080";
+    public static String boardHost = "";
+    //"http://192.168.0.111:8080";
+    public static final String PREFS_NAME = "SETTINGS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +53,9 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
         if (savedInstanceState == null) {
             manager.beginTransaction().add(R.id.body, frag).commit();
-            /*
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, frag)
-                    .commit(); */
         }
+
+        /*
         final Handler h = new Handler();
         h.postDelayed(new Runnable() {
             private long time = 0;
@@ -76,7 +70,8 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                 updateStatus();
                 h.postDelayed(this, 2000);
             }
-        }, 1000); // 1 second delay (takes millis)
+        }, 1000); */
+         // 1 second delay (takes millis)
     }
 
 
@@ -96,7 +91,12 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            showAlert("Settings");
+            manager.beginTransaction().replace(R.id.body, new PrefsFragment()).commit();
+            return true;
+        }
+
+        else if (id == R.id.action_dashbaord){
+            manager.beginTransaction().replace(R.id.body, frag).commit();
             return true;
         }
 
@@ -112,6 +112,14 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         // Start the activity, the intent will be populated with the speech text
         startActivityForResult(intent, SPEECH_REQUEST_CODE);
+    }
+
+    public void updatePreferences(){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+              //  getSharedPreferences(PREFS_NAME, 0);
+
+        boardHost = settings.getString(getString(R.string.host_key), getString(R.string.host_vaue_default));
+        Log.d("url", boardHost);
     }
 
     // This callback is invoked when the Speech Recognizer returns.
@@ -131,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                     toggleLights();
                     break;
             }
-            // requestTemperatureChange(command);
+            requestTemperatureChange(command);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -228,10 +236,11 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
         String url = boardHost+"/heat";
 
         Log.d("Request temp change", ""+delta);
+        String mode = delta==1 ? "on" : "off";
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("adjustment", delta);
+            obj.put("mode", mode);
         } catch (JSONException e) {
             e.printStackTrace();
         }

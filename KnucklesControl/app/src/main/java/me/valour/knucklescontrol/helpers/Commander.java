@@ -19,7 +19,7 @@ public class Commander {
 
         Log.d("Soundex",encoded);
 
-        if(command.contains("hot") || command.contains("warm")){
+        if(command.contains("hot") || command.contains("warm") || command.contains("hard")){
             return HOTTER;
         }
         else if(command.contains("cold")) {

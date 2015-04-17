@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="@string/host_key"
+        android:defaultValue="@string/host_vaue_default"
+        android:title="Edison Hostname URL"
+        android:inputType="textUri"
+        />
+
+</PreferenceScreen>

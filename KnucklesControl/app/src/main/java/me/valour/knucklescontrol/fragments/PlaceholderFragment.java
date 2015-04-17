@@ -1,4 +1,4 @@
-package me.valour.knucklescontrol;
+package me.valour.knucklescontrol.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import me.valour.knucklescontrol.R;
 import me.valour.knucklescontrol.views.HandView;
 
 /**
@@ -33,7 +34,7 @@ public class PlaceholderFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mListenButton = (Button)rootView.findViewById(R.id.listen_button);
-        mLightsButton = (Button)rootView.findViewById(R.id.lights_button);
+
         mStatusView = (TextView) rootView.findViewById(R.id.status);
 
         hand = (HandView)rootView.findViewById(R.id.handview);
@@ -46,16 +47,6 @@ public class PlaceholderFragment extends Fragment{
             }
         });
 
-        mLightsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // if(MainActivity.light_on) {
-                // MainActivity.showLight();
-                // } else {
-                // MainActivity.hideLight();
-                // }
-            }
-        });
         return rootView;
     }
 
@@ -64,6 +55,7 @@ public class PlaceholderFragment extends Fragment{
         super.onAttach(activity);
         try {
             listener = (PlaceholderFragmentListener) activity;
+            listener.updatePreferences();
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
         }
@@ -76,11 +68,12 @@ public class PlaceholderFragment extends Fragment{
     }
 
     public void setText(String msg) {
-        mStartLabel.setText(msg);
+
     }
 
     public interface PlaceholderFragmentListener {
         public void displaySpeechRecognizer();
+        public void updatePreferences();
     }
 
     public void registerTempChange(int delta){
