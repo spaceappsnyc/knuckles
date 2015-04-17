@@ -10,7 +10,7 @@ var self = {
 	
 	readings: [],
 	temps: [],
-	peltier_on: [],
+	heat_on: [],
 	light_on: [],
 
 	sensors: [],
@@ -38,13 +38,14 @@ var self = {
 		
 	},
 	setHeat: function(sensor, on){
-	
+		
+		heat_on[sensor] = on;
 		
 	},
 	
 	setLight: function(sensor, on){
 	
-		
+		light_on[sensor] = on;
 	},
 	
 	btot: function (b) {
