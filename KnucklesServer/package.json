@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "express": "4.2.x",
-    "body-parser": "1.12.x"
+    "body-parser": "1.12.x",
+    "mraa": "0.6.2"
   }
 }

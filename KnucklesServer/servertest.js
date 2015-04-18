@@ -1,14 +1,13 @@
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var io = require('./ioMock');
 
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
 });
-
-var SENSOR_COUNT = 5;
 
 
 app.get('/heat', function (req, res) {
@@ -31,7 +30,12 @@ var server = app.listen(8080, function () {
 
   var host = server.address().address;
   var port = server.address().port;
+  
 
   console.log('Example app listening at http://%s:%s', host, port);
+  io.start(function(t){
+	console.log(t);
+	console.log(io.SENSOR_PINS);
+	});
 
 });
