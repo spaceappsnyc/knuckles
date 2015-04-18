@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 
 var settings = {"min_temp": 23.0, "max_temp": 24.0}
 var mode = "off"
-var operation = "heat"
+var operation = "cool"
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
@@ -80,6 +80,11 @@ app.post('/settings', function (req, res) {
     }
     if('max_temp' in body){
     	settings.max_temp = body.max_temp;
+    }
+    if('operation' in body){
+    	if(body.operation == "heat" || body.operation == "cool"){
+    		settings.operation = body.operation;
+    	}
     }
 
   console.log(settings);
