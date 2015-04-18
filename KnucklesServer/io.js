@@ -6,8 +6,8 @@ var self = {
 	LIGHT_COUNT: 5,
 	HEAT_PWM: false,
 	SENSOR_PINS: [0,1,2,3,4],
-	HEAT_PINS: [],
-	LIGHT_PINS: [],
+	HEAT_PINS: [0,1,2,3,4],
+	LIGHT_PINS: [5,6,7,8,9],
 	
 	interval: null,
 	

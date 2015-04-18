@@ -84,6 +84,6 @@ var server = app.listen(8080, function () {
   var port = server.address().port;
 
   console.log('Example app listening at http://%s:%s', host, port);
-  io.start(manageTemps)
+  io.start(manageTemp)
 
 });
