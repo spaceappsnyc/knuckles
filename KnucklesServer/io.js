@@ -72,11 +72,14 @@ var self = {
 	
 	btot: function (b) {
 
-		var R_INF = 0.1751507772;
+		var R_NO = 10000;
+		var T_NO = 298;
+		var B_VAL = 3977;
+
+		var R_INF = R_NO*Math.exp(-B_VAL/T_NO)
 		var V_SRC = 4.62;
-		var B_VAL = 3950;
-		var R_SHUNT = 97100;
-		var R_FUDGE = 4000;
+		var R_SHUNT = 9810;
+		var R_FUDGE = 0000;
 
 
 		var v_t = V_SRC*(b/1024.0);
