@@ -6,8 +6,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity$PlaceholderFragment">
+    android:paddingBottom="0dp"
+    tools:context=".MainActivity$PlaceholderFragment"
+    android:background="@drawable/stars"
+    android:backgroundTint="#73140b31"
+    android:backgroundTintMode="src_atop"
+    android:clickable="true">
 
     <me.valour.knucklescontrol.views.HandView
             android:id="@+id/handview"
@@ -19,27 +23,22 @@
             custom:temp4="0"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-        android:layout_below="@+id/listen_button"
-        android:layout_alignParentStart="true" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Listen"
-            android:id="@+id/listen_button"
-            android:layout_alignParentTop="true"
-            style="@android:style/Widget.Button" />
-
-    <TextView
-        android:id="@+id/status"
-        android:text="NO HAND"
-        android:textSize="50dp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:background="@color/todo"
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Touch to activate voice command"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/darker_gray"
+        android:textAlignment="center"
+        android:textStyle="italic"
+        android:typeface="sans"
+        android:textSize="@dimen/abc_text_size_medium_material" />
+
 
 </RelativeLayout>

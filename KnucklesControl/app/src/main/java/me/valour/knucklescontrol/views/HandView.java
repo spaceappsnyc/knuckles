@@ -7,6 +7,7 @@
         import android.graphics.LinearGradient;
         import android.graphics.Paint;
         import android.graphics.Path;
+        import android.graphics.RadialGradient;
         import android.graphics.Shader;
         import android.util.AttributeSet;
         import android.view.View;
@@ -21,7 +22,16 @@ public class HandView extends View {
     public int tempChange;
     public float[] fingersTemp;
     public Position[] fingersPosition;
+    public Position[] lightPosition;
     public double side;
+
+    public boolean lights;
+
+    private Paint textPaint;
+    private Paint headingPaint;
+    private Paint lightsPaint;
+
+    private Paint lightsOnPaint;
 
     public HandView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,12 +55,37 @@ public class HandView extends View {
             a.recycle();
         }
 
+        lights = false;
+        lightPosition = new Position[3];
+        lightPosition[0] = new Position(30, 50);
+        lightPosition[1] = new Position(40, 40);
+        lightPosition[2] = new Position(48, 35);
+
         fingersPosition = new Position[5];
         fingersPosition[0] = new Position(80,35);
         fingersPosition[1] = new Position(45,5);
         fingersPosition[2] = new Position(30, 5);
         fingersPosition[3] = new Position(20, 15);
         fingersPosition[4] = new Position(12, 28);
+
+        textPaint = new Paint();
+        textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(25);
+
+        headingPaint = new Paint();
+        headingPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        headingPaint.setColor(Color.WHITE);
+        headingPaint.setTextSize(50);
+        headingPaint.setFakeBoldText(true);
+
+        lightsPaint = new Paint();
+        lightsPaint.setColor(Color.WHITE);
+        lightsPaint.setStrokeWidth(3);
+        lightsPaint.setStyle(Paint.Style.STROKE);
+
+        lightsOnPaint = new Paint();
+        lightsOnPaint.setStyle(Paint.Style.FILL);
 
     }
 
@@ -113,8 +148,8 @@ public class HandView extends View {
         p.quadTo(getPix(37.42171), getPix(3.67189), getPix(38.67412), getPix(6.32982));
         p.quadTo(getPix(39.92651), getPix(9.07349), getPix(42.07348), getPix(15.84693));
         p.quadTo(getPix(44.22), getPix(22.62036), getPix(45.38), getPix(27.85048));
-        p.cubicTo(getPix(45.383390000000006), getPix(27.85048), getPix(46.57952), getPix(32.930550000000004), getPix(46.635780000000004), getPix(33.080600000000004));
-        p.cubicTo(getPix(46.69205), getPix(33.230630000000005), getPix(46.826240000000006), getPix(33.294940000000004), getPix(47.072230000000005), getPix(33.25207));
+        p.cubicTo(getPix(45.3834), getPix(27.85048), getPix(46.57952), getPix(32.93), getPix(46.63), getPix(33.0806));
+        p.cubicTo(getPix(46.69205), getPix(33.2306), getPix(46.8262), getPix(33.2949), getPix(47.0722), getPix(33.25207));
         p.cubicTo(getPix(47.31823000000001), getPix(33.2092), getPix(47.26198), getPix(32.82338), getPix(47.26198), getPix(32.82338));
         p.lineTo(getPix(46.45688), getPix(27.59326));
         p.quadTo(getPix(45.651759999999996), getPix(22.36314), getPix(43.952079999999995), getPix(16.10415));
@@ -191,13 +226,48 @@ public class HandView extends View {
         p.lineTo(getPix(35.095829999999985), getPix(2.1286299999999745));
         canvas.drawPath(p, paint);
 
-        Paint textPaint = new Paint();
-        textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(25);
-
         for(int i=0; i<5; i++){
             canvas.drawText(String.format("%.1f C", fingersTemp[i]), getPix(fingersPosition[i].x), getPix(fingersPosition[i].y), textPaint);
+        }
+
+
+
+        int radius = 50;
+        for(int i=0; i<lightPosition.length; i++){
+            Position pos = lightPosition[i];
+            float x = getPix(pos.x);
+            float y = getPix(pos.y);
+
+            Paint lightColor;
+            if(lights) {
+                Shader radialShader = new RadialGradient(x, y, radius, Color.WHITE, Color.TRANSPARENT, Shader.TileMode.CLAMP);
+                lightsOnPaint.setShader(radialShader);
+                canvas.drawCircle(x, y, radius, lightsOnPaint);
+            }
+            canvas.drawCircle(x, y, radius/2, lightsPaint);
+        }
+
+
+       /* String status = "WAITING";
+        if(tempChange==1){
+            status = "HEATING";
+        } else if(tempChange==-1){
+            status = "COOLING";
+        }
+        canvas.drawText(status, getPix(30.0), getPix(60.0), headingPaint); */
+    }
+
+    public void drawGrid(Canvas canvas){
+        Paint p = new Paint();
+        p.setColor(Color.WHITE);
+        p.setStyle(Paint.Style.STROKE);
+        for(int x=10; x<100; x+=10){
+            float px = getPix(x);
+            canvas.drawLine(px, 0, px, (float)side, p);
+        }
+        for(int y=10; y<100; y+=10){
+            float py = getPix(y);
+            canvas.drawLine(0, py, (float)side, py, p);
         }
     }
 

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,12 +20,10 @@ import me.valour.knucklescontrol.views.HandView;
 public class PlaceholderFragment extends Fragment{
 
 
-    TextView mStartLabel;
     Button mListenButton;
     Button mLightsButton;
     HandView hand;
     PlaceholderFragmentListener listener;
-    TextView mStatusView;
 
     public PlaceholderFragment() {}
 
@@ -32,18 +31,14 @@ public class PlaceholderFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        mListenButton = (Button)rootView.findViewById(R.id.listen_button);
-
-        mStatusView = (TextView) rootView.findViewById(R.id.status);
-
         hand = (HandView)rootView.findViewById(R.id.handview);
 
-        mListenButton.setOnClickListener(new View.OnClickListener() {
+
+        rootView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                Log.d("voice", "listening for command");
+            public boolean onTouch(View v, MotionEvent event) {
                 listener.displaySpeechRecognizer();
+                return false;
             }
         });
 
@@ -80,17 +75,15 @@ public class PlaceholderFragment extends Fragment{
         hand.tempChange = delta;
         hand.invalidate();
 
-        if(delta==1){
-            mStatusView.setBackgroundColor(getResources().getColor(R.color.red));
-            mStatusView.setText("HEATING");
-        } else if(delta==-1){
-            mStatusView.setBackgroundColor(getResources().getColor(R.color.blue));
-            mStatusView.setText("COOLING");
-        }
     }
 
     public void registerFingerTemperatures(int index, float temp){
         hand.fingersTemp[index] = temp;
+        hand.invalidate();
+    }
+
+    public void toogleLights(){
+        hand.lights = !hand.lights;
         hand.invalidate();
     }
 

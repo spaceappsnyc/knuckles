@@ -40,7 +40,6 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
     RequestQueue requestQueue;
 
     public static String boardHost = "";
-    //"http://192.168.0.111:8080";
     public static final String PREFS_NAME = "SETTINGS";
 
     @Override
@@ -55,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             manager.beginTransaction().add(R.id.body, frag).commit();
         }
 
-        /*
+
         final Handler h = new Handler();
         h.postDelayed(new Runnable() {
             private long time = 0;
@@ -70,7 +69,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                 updateStatus();
                 h.postDelayed(this, 2000);
             }
-        }, 1000); */
+        }, 1000);
          // 1 second delay (takes millis)
     }
 
@@ -132,14 +131,14 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                     RecognizerIntent.EXTRA_RESULTS);
             String spokenText = results.get(0);
             Log.d("voice", spokenText);
-            frag.setText(spokenText);
+
             int command = Commander.recognize(spokenText);
-            switch(command) {
-                case Commander.LIGHTS:
-                    toggleLights();
-                    break;
+
+            if(command==Commander.LIGHTS){
+                toggleLights();
+            } else {
+                requestTemperatureChange(command);
             }
-            requestTemperatureChange(command);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -194,6 +193,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
     private void toggleLights() {
         Log.d("LIGHTS","LIGHTS");
+        frag.toogleLights();
         /*
         requestQueue = getRequestQueue();
         String url = boardHost+"/light";
@@ -229,7 +229,8 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
     private void requestTemperatureChange(int delta) {
         if(delta != Commander.COLDER && delta != Commander.HOTTER) {
-            showAlert("Unknown command: "+delta);
+           // showAlert("Unknown command: "+delta);
+
            return;
         }
         requestQueue = getRequestQueue();
@@ -245,6 +246,8 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             e.printStackTrace();
         }
 
+        frag.registerTempChange(delta);
+
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -258,19 +261,6 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
         });
 
         requestQueue.add(jsonRequest);
-    }
-
-    public void showAlert(String msg) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Temp Control");
-        alertDialog.setMessage("Message: "+msg);
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // here you can add functions
-            }
-        });
-        alertDialog.setIcon(R.drawable.warning);
-        alertDialog.show();
     }
 
 }
