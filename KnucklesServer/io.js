@@ -79,7 +79,7 @@ var self = {
 		var R_INF = R_NO*Math.exp(-B_VAL/T_NO)
 		var V_SRC = 4.62;
 		var R_SHUNT = 9810;
-		var R_FUDGE = 0000;
+		var R_FUDGE = 0700;
 
 
 		var v_t = V_SRC*(b/1024.0);
