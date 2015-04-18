@@ -7,6 +7,7 @@ app.use(bodyParser.json());
 
 
 var settings = {"min_temp":23.0}
+var mode = "off"
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
