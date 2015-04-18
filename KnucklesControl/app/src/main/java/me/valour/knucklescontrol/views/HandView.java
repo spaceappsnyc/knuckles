@@ -46,11 +46,11 @@ public class HandView extends View {
 
             tempChange = a.getInteger(R.styleable.HandView_tempChange, 0);
 
-            fingersTemp[0] = a.getFloat(R.styleable.HandView_temp0, 0);
-            fingersTemp[1] = a.getFloat(R.styleable.HandView_temp1, 0);
-            fingersTemp[2] = a.getFloat(R.styleable.HandView_temp2, 0);
-            fingersTemp[3] = a.getFloat(R.styleable.HandView_temp3, 0);
-            fingersTemp[4] = a.getFloat(R.styleable.HandView_temp4, 0);
+            fingersTemp[0] = a.getFloat(R.styleable.HandView_temp0, 10);
+            fingersTemp[1] = a.getFloat(R.styleable.HandView_temp1, 15);
+            fingersTemp[2] = a.getFloat(R.styleable.HandView_temp2, 12);
+            fingersTemp[3] = a.getFloat(R.styleable.HandView_temp3, 11);
+            fingersTemp[4] = a.getFloat(R.styleable.HandView_temp4, 20);
         } finally {
             a.recycle();
         }
@@ -62,16 +62,17 @@ public class HandView extends View {
         lightPosition[2] = new Position(48, 35);
 
         fingersPosition = new Position[5];
-        fingersPosition[0] = new Position(80,35);
-        fingersPosition[1] = new Position(45,5);
-        fingersPosition[2] = new Position(30, 5);
-        fingersPosition[3] = new Position(20, 15);
-        fingersPosition[4] = new Position(12, 28);
+        fingersPosition[0] = new Position(80,32);
+        fingersPosition[1] = new Position(43,5);
+        fingersPosition[2] = new Position(32, 5);
+        fingersPosition[3] = new Position(23, 15);
+        fingersPosition[4] = new Position(15, 28);
 
         textPaint = new Paint();
         textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(25);
+        textPaint.setShadowLayer(3,2,2, Color.BLACK);
 
         headingPaint = new Paint();
         headingPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -83,6 +84,7 @@ public class HandView extends View {
         lightsPaint.setColor(Color.WHITE);
         lightsPaint.setStrokeWidth(3);
         lightsPaint.setStyle(Paint.Style.STROKE);
+        lightsPaint.setAntiAlias(true);
 
         lightsOnPaint = new Paint();
         lightsOnPaint.setStyle(Paint.Style.FILL);
@@ -226,11 +228,20 @@ public class HandView extends View {
         p.lineTo(getPix(35.095829999999985), getPix(2.1286299999999745));
         canvas.drawPath(p, paint);
 
+        float totalTemp = 0;
         for(int i=0; i<5; i++){
-            canvas.drawText(String.format("%.1f C", fingersTemp[i]), getPix(fingersPosition[i].x), getPix(fingersPosition[i].y), textPaint);
+            float x = getPix(fingersPosition[i].x);
+            float y = getPix(fingersPosition[i].y);
+            canvas.save();
+            canvas.rotate(65, x, y);
+            canvas.drawText(String.format("%.1f C", fingersTemp[i]),
+                    x, y, textPaint);
+            canvas.restore();
+            totalTemp += fingersTemp[i];
         }
-
-
+        float avgTemp = totalTemp / 5;
+        canvas.drawText("Avg Temp",getPix(35.0), getPix(60.0), headingPaint);
+        canvas.drawText(String.format("%.1f C", avgTemp), getPix(40.0), getPix(70.0), headingPaint);
 
         int radius = 50;
         for(int i=0; i<lightPosition.length; i++){
@@ -247,14 +258,7 @@ public class HandView extends View {
             canvas.drawCircle(x, y, radius/2, lightsPaint);
         }
 
-
-       /* String status = "WAITING";
-        if(tempChange==1){
-            status = "HEATING";
-        } else if(tempChange==-1){
-            status = "COOLING";
-        }
-        canvas.drawText(status, getPix(30.0), getPix(60.0), headingPaint); */
+       // drawGrid(canvas);
     }
 
     public void drawGrid(Canvas canvas){

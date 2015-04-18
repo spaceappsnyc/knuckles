@@ -24,6 +24,7 @@ public class PlaceholderFragment extends Fragment{
     Button mLightsButton;
     HandView hand;
     PlaceholderFragmentListener listener;
+    TextView consolePrinter;
 
     public PlaceholderFragment() {}
 
@@ -33,7 +34,6 @@ public class PlaceholderFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         hand = (HandView)rootView.findViewById(R.id.handview);
 
-
         rootView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -41,6 +41,8 @@ public class PlaceholderFragment extends Fragment{
                 return false;
             }
         });
+
+        consolePrinter = (TextView)rootView.findViewById(R.id.console_printer);
 
         return rootView;
     }
@@ -63,7 +65,7 @@ public class PlaceholderFragment extends Fragment{
     }
 
     public void setText(String msg) {
-
+        consolePrinter.setText(msg);
     }
 
     public interface PlaceholderFragmentListener {
@@ -85,6 +87,10 @@ public class PlaceholderFragment extends Fragment{
     public void toogleLights(){
         hand.lights = !hand.lights;
         hand.invalidate();
+    }
+
+    public boolean isLightOn(){
+        return hand.lights;
     }
 
 }

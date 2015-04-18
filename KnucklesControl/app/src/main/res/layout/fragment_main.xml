@@ -40,5 +40,17 @@
         android:typeface="sans"
         android:textSize="@dimen/abc_text_size_medium_material" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/console_printer"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:typeface="monospace"
+        android:textColor="#ff60ff6d"
+        android:paddingTop="10dp" />
+
 
 </RelativeLayout>

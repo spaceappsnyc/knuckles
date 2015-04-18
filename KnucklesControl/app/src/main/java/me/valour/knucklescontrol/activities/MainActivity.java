@@ -70,6 +70,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
                 h.postDelayed(this, 2000);
             }
         }, 1000);
+
          // 1 second delay (takes millis)
     }
 
@@ -136,8 +137,17 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
             if(command==Commander.LIGHTS){
                 toggleLights();
-            } else {
+                if(frag.isLightOn()){
+                    frag.setText("Let there be light!");
+                } else {
+                    frag.setText("It's more fun in the dark");
+                }
+
+            } else if (command==Commander.COLDER || command==Commander.HOTTER) {
                 requestTemperatureChange(command);
+                frag.setText("Temperature Adjusted");
+            } else {
+                frag.setText("Unknown command: "+spokenText);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -229,8 +239,6 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
 
     private void requestTemperatureChange(int delta) {
         if(delta != Commander.COLDER && delta != Commander.HOTTER) {
-           // showAlert("Unknown command: "+delta);
-
            return;
         }
         requestQueue = getRequestQueue();
@@ -256,7 +264,7 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("json", error.getMessage());
+                Log.e("json", "error reaching server");
             }
         });
 
