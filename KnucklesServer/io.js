@@ -1,6 +1,6 @@
 var self = {
 	mraa: require('mraa'),
-	LOOP_SPEED: 100,
+	LOOP_SPEED: 500,
 	SENSOR_COUNT: 5,
 	OUT_COUNT: 5,
 	LIGHT_COUNT: 5,
