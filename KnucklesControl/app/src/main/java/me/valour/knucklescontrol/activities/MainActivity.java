@@ -171,7 +171,9 @@ public class MainActivity extends ActionBarActivity implements PlaceholderFragme
             public void onResponse(JSONObject response) {
                 Log.d("json", response.toString());
                 try {
-                    boolean isHeating = response.getBoolean("is_heating");
+                    //boolean isHeating = response.getBoolean("is_heating");
+                    JSONArray jsArr = response.getJSONArray("is_heating");
+                    boolean isHeating = jsArr.getBoolean(0);
                     if(isHeating) {
 
                         frag.registerTempChange(1);

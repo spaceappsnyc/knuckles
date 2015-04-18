@@ -22,7 +22,7 @@ public class Commander {
         if(command.contains("hot") || command.contains("warm") || command.contains("hard")){
             return HOTTER;
         }
-        else if(command.contains("cold")) {
+        else if(command.contains("cold") || command.contains("cool")) {
             return COLDER;
         }
         else if(command.contains("light") || command.contains("ite")) {
