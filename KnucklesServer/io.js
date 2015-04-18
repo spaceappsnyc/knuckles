@@ -25,13 +25,13 @@ var self = {
 		}
 		for(var i = 0; i < self.OUT_COUNT; i++){
 			var out = new self.mraa.Gpio(self.HEAT_PINS[i]);
-			out.dir(mraa.DIR_OUT);
+			out.dir(self.mraa.DIR_OUT);
 			self.heaters[i] = out;
 			self.heat_on[i] = false;
 		}
 		for(var i = 0; i < self.LIGHT_COUNT; i++){
 			var out = new self.mraa.Gpio(self.LIGHT_PINS[i]);
-			out.dir(mraa.DIR_OUT);
+			out.dir(self.mraa.DIR_OUT);
 			self.lights[i] = out;
 			self.light_on[i] = false;
 		}
