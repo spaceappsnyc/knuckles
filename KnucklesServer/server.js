@@ -6,8 +6,9 @@ var io = require('./io');
 app.use(bodyParser.json());
 
 
-var settings = {"min_temp":23.0}
+var settings = {"min_temp": 23.0, "max_temp": 24.0}
 var mode = "off"
+var operation = "heat"
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
@@ -18,6 +19,7 @@ function getState() {
     "sensors":io.readings,
     "temps":io.temps,
     "mode":mode,
+    "operation": operation,
     "is_heating": io.heat_on,
 	"is_light": io.light_on,
     "settings": settings
@@ -27,10 +29,13 @@ function getState() {
 function manageTemp(tA) {
 	if(mode == "auto"){
 		for(var t = 0; t < tA.length; t++){
-			if(tA[t] <= settings.min_temp && !io.heat_on[t]){
+			if(((operation == "heat" && tA[t] <= settings.min_temp) || 
+				(operation == "cool" && tA[t] >= settings.max_temp)) && !io.heat_on[t]){
 				io.setHeat(t, true);
 				console.log("(auto) turned on | "+t);
-			} else if(tA[t] >= settings.min_temp && io.heat_on[t]){
+			} else if(
+				((operation == "heat" && tA[t] >= settings.min_temp) || 
+				(operation == "cool" && tA[t] <= settings.max_temp)) && io.heat_on[t]){
 				io.setHeat(t, false);
 				console.log("(auto) turned off | "+t);
 			}
@@ -71,7 +76,10 @@ app.post('/settings', function (req, res) {
   var body = req.body;
 
     if('min_temp' in body){
-      settings.min_temp = body.min_temp;
+		settings.min_temp = body.min_temp;
+    }
+    if('max_temp' in body){
+    	settings.max_temp = body.max_temp;
     }
 
   console.log(settings);
