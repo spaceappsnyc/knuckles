@@ -60,6 +60,7 @@ var self = {
 	},
 	
 	setHeat: function(outNum, on){
+		console.log("set "+outNum+" to "+on);
 		self.heaters[outNum].write(self.btoi(on));
 		self.heat_on[outNum] = on;
 		

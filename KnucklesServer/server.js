@@ -44,7 +44,9 @@ function manageTemp(tA) {
 }
 
 app.get('/status', function (req, res) {
-  res.send(getState());
+	var status = getState();
+	console.log(status);
+  res.send(status);
 });
 
 app.post('/heat', function(req, res){
